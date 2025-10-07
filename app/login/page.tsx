@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,22 +20,35 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
+      console.log('🔐 Tentative de connexion...', { email });
+
       const result = await signIn('credentials', {
         email,
         password,
         redirect: false,
+        callbackUrl: '/',
       });
 
+      console.log('📨 Résultat signIn:', result);
+
       if (result?.error) {
+        console.error('❌ Erreur de connexion:', result.error);
         setError('Email ou mot de passe incorrect');
         setLoading(false);
         return;
       }
 
-      router.push('/dashboard');
-      router.refresh();
+      if (result?.ok) {
+        console.log('✅ Connexion réussie !');
+        // Petit délai pour laisser la session se mettre à jour
+        setTimeout(() => {
+          router.push('/');
+          router.refresh();
+        }, 100);
+      }
     } catch (err) {
-      setError('Une erreur est survenue');
+      console.error('❌ Erreur catch:', err);
+      setError('Une erreur est survenue lors de la connexion');
       setLoading(false);
     }
   };

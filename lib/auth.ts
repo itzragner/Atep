@@ -32,7 +32,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Mot de passe incorrect');
         }
 
-        // Conversion explicite de _id en string
         return {
           id: String(user._id),
           email: user.email,
