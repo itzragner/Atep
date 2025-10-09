@@ -44,7 +44,7 @@ const WorkshopSchema = new Schema<IWorkshop>(
     ],
     qrCode: {
       type: String,
-      required: true,
+      default: '', 
     },
     organizerId: {
       type: Schema.Types.ObjectId,

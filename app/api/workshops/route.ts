@@ -10,7 +10,7 @@ const workshopSchema = z.object({
   title: z.string().min(3),
   description: z.string(),
   location: z.string(),
-  time: z.string().datetime(),
+  time: z.string(),
   points: z.number().min(0).default(10),
   maxParticipants: z.number().min(1).default(50),
 });
@@ -32,13 +32,13 @@ export async function GET(req: NextRequest) {
       query = { time: { $gte: new Date() } };
     }
 
-    const workshops = await Workshop.find(query)
-      .populate('organizerId', 'fullName email')
-      .populate('participants', 'fullName email points')
-      .sort({ time: 1 });
+    const workshops = await Workshop.find(query).sort({ time: 1 }).lean();
+
+    console.log('✅ Workshops fetched:', workshops.length);
 
     return NextResponse.json({ workshops });
-  } catch (error) {
+  } catch (error: any) {
+    console.error('❌ Error fetching workshops:', error.message);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }
@@ -46,24 +46,48 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
+    
+    console.log('📡 POST /api/workshops - Session:', session?.user?.email);
+
     if (!session || (session.user.role !== 'admin' && session.user.role !== 'organizer')) {
+      console.error('❌ Non autorisé - Role:', session?.user?.role);
       return NextResponse.json({ error: 'Non autorisé' }, { status: 403 });
     }
 
     const body = await req.json();
+    console.log('📦 Body reçu:', body);
+
     const validatedData = workshopSchema.parse(body);
+    console.log('✅ Données validées:', validatedData);
 
     await connectDB();
+    console.log('✅ MongoDB connecté');
 
-    const workshopId = new Date().getTime().toString();
+    // Générer un ID unique pour le QR code
+    const workshopId = `WS-${Date.now()}`;
+    console.log('🔑 Workshop ID:', workshopId);
+
+    // Générer le QR code
     const qrCode = await QRCode.toDataURL(workshopId);
+    console.log('✅ QR Code généré');
+
+    // Convertir la date string en Date
+    const workshopTime = new Date(validatedData.time);
+    console.log('📅 Date convertie:', workshopTime);
 
     const workshop = await Workshop.create({
-      ...validatedData,
+      title: validatedData.title,
+      description: validatedData.description,
+      location: validatedData.location,
+      time: workshopTime,
+      points: validatedData.points,
+      maxParticipants: validatedData.maxParticipants,
       organizerId: session.user.id,
-      qrCode,
+      qrCode: qrCode,
       participants: [],
     });
+
+    console.log('✅ Workshop créé:', workshop._id);
 
     return NextResponse.json(
       {
@@ -72,10 +96,22 @@ export async function POST(req: NextRequest) {
       },
       { status: 201 }
     );
-  } catch (error) {
+  } catch (error: any) {
+    console.error('❌ Erreur complète:', error);
+    console.error('❌ Message:', error.message);
+    console.error('❌ Stack:', error.stack);
+
     if (error instanceof z.ZodError) {
+      console.error('❌ Erreurs de validation:', error.issues);
       return NextResponse.json({ error: error.issues }, { status: 400 });
     }
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
+
+    return NextResponse.json(
+      {
+        error: 'Erreur serveur',
+        details: error.message,
+      },
+      { status: 500 }
+    );
   }
 }

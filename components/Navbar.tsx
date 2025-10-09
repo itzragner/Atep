@@ -23,8 +23,8 @@ export default function Navbar() {
       case 'admin':
         return [
           { href: '/admin', label: 'Dashboard', icon: Home },
-          { href: '/admin/workshops', label: 'Workshops', icon: Calendar },
           { href: '/admin/users', label: 'Utilisateurs', icon: Users },
+          { href: '/admin/workshops', label: 'Workshops', icon: Calendar },
           { href: '/admin/activities', label: 'Activités', icon: Activity },
         ];
       case 'organizer':
