@@ -6,10 +6,10 @@ export interface IWorkshop extends Document {
   location: string;
   time: Date;
   points: number;
-  participants: mongoose.Types.ObjectId[];
-  qrCode: string;
-  organizerId: mongoose.Types.ObjectId;
   maxParticipants?: number;
+  organizerId: mongoose.Types.ObjectId;
+  participants: mongoose.Types.ObjectId[];
+  qrCode?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,7 +34,17 @@ const WorkshopSchema = new Schema<IWorkshop>(
     },
     points: {
       type: Number,
+      required: true,
       default: 10,
+    },
+    maxParticipants: {
+      type: Number,
+      default: 50,
+    },
+    organizerId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
     participants: [
       {
@@ -44,16 +54,6 @@ const WorkshopSchema = new Schema<IWorkshop>(
     ],
     qrCode: {
       type: String,
-      default: '', 
-    },
-    organizerId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    maxParticipants: {
-      type: Number,
-      default: 50,
     },
   },
   {
@@ -64,7 +64,7 @@ const WorkshopSchema = new Schema<IWorkshop>(
 WorkshopSchema.index({ time: 1 });
 WorkshopSchema.index({ organizerId: 1 });
 
-const Workshop: Model<IWorkshop> =
-  mongoose.models.Workshop || mongoose.model<IWorkshop>('Workshop', WorkshopSchema);
+// ✅ FIX: Prevent model overwrite error
+const Workshop: Model<IWorkshop> = mongoose.models.Workshop || mongoose.model<IWorkshop>('Workshop', WorkshopSchema);
 
 export default Workshop;

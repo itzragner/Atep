@@ -16,9 +16,10 @@ const UserSchema = new Schema<IUser>(
     email: {
       type: String,
       required: true,
-      unique: true,
+      unique: true, // ✅ Keep this
       lowercase: true,
       trim: true,
+      // ❌ REMOVE: index: true (this causes the duplicate index warning)
     },
     password: {
       type: String,
@@ -49,8 +50,11 @@ const UserSchema = new Schema<IUser>(
   }
 );
 
+// ✅ Indexes - these are fine
 UserSchema.index({ role: 1 });
+// ❌ REMOVE this line to avoid duplicate: UserSchema.index({ email: 1 });
 
+// ✅ Prevent model overwrite error
 const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
 
 export default User;

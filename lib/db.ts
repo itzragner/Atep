@@ -33,6 +33,10 @@ async function connectDB(): Promise<typeof mongoose> {
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
       console.log('✅ MongoDB connected successfully');
+      require('@/models/User');
+      require('@/models/Workshop');
+      require('@/models/Attendance');
+      require('@/models/Notification');
       return mongoose;
     });
   }

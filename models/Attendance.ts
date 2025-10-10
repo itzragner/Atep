@@ -4,8 +4,8 @@ export interface IAttendance extends Document {
   participantId: mongoose.Types.ObjectId;
   workshopId: mongoose.Types.ObjectId;
   timestamp: Date;
-  validatedBy: mongoose.Types.ObjectId;
   method: 'qr' | 'manual';
+  validatedBy?: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,15 +26,14 @@ const AttendanceSchema = new Schema<IAttendance>(
       type: Date,
       default: Date.now,
     },
-    validatedBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
     method: {
       type: String,
       enum: ['qr', 'manual'],
-      default: 'qr',
+      required: true,
+    },
+    validatedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
     },
   },
   {
@@ -45,7 +44,7 @@ const AttendanceSchema = new Schema<IAttendance>(
 AttendanceSchema.index({ participantId: 1, workshopId: 1 }, { unique: true });
 AttendanceSchema.index({ workshopId: 1 });
 
-const Attendance: Model<IAttendance> =
-  mongoose.models.Attendance || mongoose.model<IAttendance>('Attendance', AttendanceSchema);
+// ✅ FIX: Prevent model overwrite error
+const Attendance: Model<IAttendance> = mongoose.models.Attendance || mongoose.model<IAttendance>('Attendance', AttendanceSchema);
 
 export default Attendance;

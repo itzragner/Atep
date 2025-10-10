@@ -11,7 +11,7 @@ import { z } from 'zod';
 const attendanceSchema = z.object({
   workshopId: z.string(),
   participantId: z.string(),
-  method: z.enum(['qr', 'manual']).default('qr'),
+  method: z.enum(['qr', 'manual']).default('manual'),
 });
 
 export async function POST(req: NextRequest) {
@@ -70,35 +70,7 @@ export async function POST(req: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.issues }, { status: 400 });
     }
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
-  }
-}
-
-export async function GET(req: NextRequest) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
-    }
-
-    await connectDB();
-
-    const { searchParams } = new URL(req.url);
-    const workshopId = searchParams.get('workshopId');
-    const participantId = searchParams.get('participantId');
-
-    let query: any = {};
-    if (workshopId) query.workshopId = workshopId;
-    if (participantId) query.participantId = participantId;
-
-    const attendances = await Attendance.find(query)
-      .populate('participantId', 'fullName email')
-      .populate('workshopId', 'title time')
-      .populate('validatedBy', 'fullName')
-      .sort({ timestamp: -1 });
-
-    return NextResponse.json({ attendances });
-  } catch (error) {
+    console.error('Error creating attendance:', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }
