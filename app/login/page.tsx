@@ -55,17 +55,17 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-bold text-center">EventConnect</CardTitle>
-          <CardDescription className="text-center">
+      <Card className="w-full max-w-md bg-white shadow-xl">
+        <CardHeader className="space-y-1 bg-white">
+          <CardTitle className="text-3xl font-bold text-center text-gray-900">EventConnect</CardTitle>
+          <CardDescription className="text-center text-gray-600">
             Connectez-vous à votre compte
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="bg-white pt-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
+              <label htmlFor="email" className="text-sm font-medium text-gray-900 block">
                 Email
               </label>
               <input
@@ -73,14 +73,14 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-400"
                 placeholder="votre@email.com"
                 required
               />
             </div>
-
+  
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
+              <label htmlFor="password" className="text-sm font-medium text-gray-900 block">
                 Mot de passe
               </label>
               <input
@@ -88,29 +88,29 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-400"
                 placeholder="••••••••"
                 required
               />
             </div>
-
+  
             {error && (
-              <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm">{error}</div>
+              <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm border border-red-200">{error}</div>
             )}
-
-            <Button type="submit" className="w-full" disabled={loading}>
+  
+            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium" disabled={loading}>
               {loading ? 'Connexion...' : 'Se connecter'}
             </Button>
           </form>
-
-          <div className="mt-4 text-center text-sm">
-            <span className="text-gray-600">Pas encore de compte ? </span>
-            <Link href="/register" className="text-blue-600 hover:underline font-medium">
+  
+          <div className="mt-6 text-center text-sm">
+            <span className="text-gray-700">Pas encore de compte ? </span>
+            <Link href="/register" className="text-blue-600 hover:text-blue-700 hover:underline font-medium">
               S'inscrire
             </Link>
           </div>
         </CardContent>
       </Card>
     </div>
-  );
+  );  
 }

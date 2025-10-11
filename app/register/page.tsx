@@ -50,17 +50,17 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-bold text-center">EventConnect</CardTitle>
-          <CardDescription className="text-center">
+      <Card className="w-full max-w-md bg-white shadow-xl">
+        <CardHeader className="space-y-1 bg-white">
+          <CardTitle className="text-3xl font-bold text-center text-gray-900">EventConnect</CardTitle>
+          <CardDescription className="text-center text-gray-600">
             Créez votre compte participant
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="bg-white pt-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <label htmlFor="fullName" className="text-sm font-medium">
+              <label htmlFor="fullName" className="text-sm font-medium text-gray-900 block">
                 Nom complet
               </label>
               <input
@@ -68,14 +68,14 @@ export default function RegisterPage() {
                 type="text"
                 value={formData.fullName}
                 onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-400"
                 placeholder="Jean Dupont"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
+              <label htmlFor="email" className="text-sm font-medium text-gray-900 block">
                 Email
               </label>
               <input
@@ -83,14 +83,14 @@ export default function RegisterPage() {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-400"
                 placeholder="votre@email.com"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
+              <label htmlFor="password" className="text-sm font-medium text-gray-900 block">
                 Mot de passe
               </label>
               <input
@@ -98,26 +98,26 @@ export default function RegisterPage() {
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 placeholder-gray-400"
                 placeholder="••••••••"
                 required
                 minLength={6}
               />
-              <p className="text-xs text-gray-500">Minimum 6 caractères</p>
+              <p className="text-xs text-gray-600">Minimum 6 caractères</p>
             </div>
 
             {error && (
-              <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm">{error}</div>
+              <div className="bg-red-50 text-red-600 p-3 rounded-md text-sm border border-red-200">{error}</div>
             )}
 
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium" disabled={loading}>
               {loading ? 'Inscription...' : "S'inscrire"}
             </Button>
           </form>
 
-          <div className="mt-4 text-center text-sm">
-            <span className="text-gray-600">Vous avez déjà un compte ? </span>
-            <Link href="/login" className="text-blue-600 hover:underline font-medium">
+          <div className="mt-6 text-center text-sm">
+            <span className="text-gray-700">Vous avez déjà un compte ? </span>
+            <Link href="/login" className="text-blue-600 hover:text-blue-700 hover:underline font-medium">
               Se connecter
             </Link>
           </div>

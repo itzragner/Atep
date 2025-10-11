@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* Force proper color scheme for forms and inputs */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -12,15 +13,112 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Explicitly set light mode for the entire app */
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  color-scheme: light;
+}
+
+/* Ensure all inputs, labels, and text are visible */
+input, 
+textarea, 
+select, 
+label,
+p,
+span,
+div {
+  color: inherit;
+}
+
+/* Fix for card components */
+[class*="card"] {
+  background-color: #ffffff !important;
+  color: #171717 !important;
+}
+
+/* Fix for input fields */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="datetime-local"],
+textarea,
+select {
+  background-color: #ffffff !important;
+  color: #171717 !important;
+  border-color: #d1d5db !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af !important;
+  opacity: 1;
+}
+
+/* Fix for labels */
+label {
+  color: #171717 !important;
+  display: block;
+}
+
+/* Fix for buttons to ensure proper contrast */
+button {
+  color: inherit;
+}
+
+button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Dark mode override - we want to stay in light mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    --foreground: #171717;
+  }
+  
+  body {
+    background: #ffffff;
+    color: #171717;
+    color-scheme: light;
+  }
+}
+
+/* Ensure proper text colors for common utility classes */
+.text-gray-600 {
+  color: #4b5563 !important;
+}
+
+.text-gray-700 {
+  color: #374151 !important;
+}
+
+.text-gray-900 {
+  color: #111827 !important;
+}
+
+.text-white {
+  color: #ffffff !important;
+}
+
+/* Fix for Card component backgrounds */
+.bg-white {
+  background-color: #ffffff !important;
+}
+
+.bg-gray-50 {
+  background-color: #f9fafb !important;
+}
+
+/* Ensure borders are visible */
+.border {
+  border-color: #d1d5db !important;
+}
+
+.border-gray-300 {
+  border-color: #d1d5db !important;
 }
